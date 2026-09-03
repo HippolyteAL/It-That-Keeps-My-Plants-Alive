@@ -1,0 +1,57 @@
+{
+  "name": "DS3231",
+  "author": "Hippolyte Audet-Lagacé",
+  "pins": ["VCC", "GND", "SDA", "SCL"],
+  "controls": [
+    {
+      "id": "second",
+      "label": "Second",
+      "type": "range",
+      "min": 0,
+      "max": 59,
+      "step": 1 
+    }, {
+      "id": "minute",
+      "label": "Minute",
+      "type": "range",
+      "min": 0,
+      "max": 59,
+      "step": 1 
+    }, {
+      "id": "hour",
+      "label": "Hour",
+      "type": "range",
+      "min": 0,
+      "max": 23,
+      "step": 1 
+    }, {
+      "id": "day",
+      "label": "Day of Week",
+      "type": "range",
+      "min": 1,
+      "max": 7,
+      "step": 1
+    }, {
+      "id": "date",
+      "label": "Date",
+      "type": "range",
+      "min": 1,
+      "max": 31,
+      "step": 1
+    }, {
+      "id": "month",
+      "label": "Month",
+      "type": "range",
+      "min": 1,
+      "max": 12,
+      "step": 1
+    }, {
+      "id": "year",
+      "label": "Year",
+      "type": "range",
+      "min": 0,
+      "max": 99,
+      "step": 1
+    }
+  ]
+}

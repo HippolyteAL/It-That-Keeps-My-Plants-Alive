@@ -1,0 +1,20 @@
+{
+    "name": "BH1750 Simulator",
+    "author": "Hippolyte Audet-Lagace",
+    "pins": [
+        "VCC",
+        "GND",
+        "SDA",
+        "SCL"
+    ],
+    "controls": [
+        {
+            "id": "lux",
+            "label": "Light Level (lux)",
+            "type": "range",
+            "min": 0,
+            "max": 54000,
+            "step": 10
+        }
+    ]
+}

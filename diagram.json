@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "author": "Hippolyte Audet-Lagacé",
+  "editor": "wokwi",
+  "parts": [
+    {
+        "id": "ESP32_WROOM_32E",
+        "type": "board-esp32-devkit-c-v4",
+        "left": 0,
+        "top": 0
+    }, {
+        "id": "28BYJ_48_stepper_motor",
+        "type": "wokwi-stepper-motor",
+        "left": -200,
+        "top": -250,
+        "attrs": {
+            "arrow": "orange",
+            "display": "steps",
+            "size": "11",
+            "gearRatio": "2048:200"
+        }
+    }, {
+        "id": "SW_Push",
+        "type": "wokwi-pushbutton",
+        "left": -240,
+        "top": -135,
+        "attrs": {
+            "label": "Stepper position sanity check (trigger homing event)"
+        }
+    }, {
+        "id": "LED",
+        "type": "wokwi-LED",
+        "left": -240,
+        "top": 0,
+        "attrs": {
+            "label": "5V LED grow light",
+            "color": "white",
+            "lightColor": "yellow"
+        }
+    }, {
+        "id": "PUMP",
+        "type": "wokwi-LED",
+        "left": -280,
+        "top": 0,
+        "attrs": {
+            "label": "5V submersible mini-pump",
+            "color": "white",
+            "lightColor": "blue"
+        }
+    }, {
+        "id": "DS18B20",
+        "type": "wokwi-ds18b20",
+        "left": 120,
+        "top": -150
+    }, {
+        "id": "Soil_moisture1",
+        "type": "wokwi-potentiometer",
+        "left": 170,
+        "top": -150,
+        "attrs": {
+            "value": "300"
+        }
+    }, {
+        "id": "Soil_moisture2",
+        "type": "wokwi-potentiometer",
+        "left": 270,
+        "top": -150,
+        "attrs": {
+            "value": "300"
+        }
+    }, {
+        "id": "Soil_moisture3",
+        "type": "wokwi-potentiometer",
+        "left": 370,
+        "top": -150,
+        "attrs": {
+            "value": "300"
+        }
+    }, {
+        "id": "ambient_temp_moisture",
+        "type": "chip-SHT31",
+        "left": 125,
+        "top": -300
+    }, {
+        "id": "ambient_light",
+        "type": "chip-BH1750",
+        "left": 125,
+        "top": -250
+    }, {
+        "id": "clock",
+        "type": "chip-DS3231",
+        "left": 125,
+        "top": -200
+    }, {
+        "id": "logging",
+        "type": "wokwi-microsd-card",
+        "left": 200,
+        "top": 130,
+        "rotate": -90
+    }
+  ],
+  "connections": [
+    ["ESP32_WROOM_32E:26", "28BYJ_48_stepper_motor:A-", "green", []],
+    ["ESP32_WROOM_32E:27", "28BYJ_48_stepper_motor:A+", "green", []],
+    ["ESP32_WROOM_32E:32", "28BYJ_48_stepper_motor:B+", "green", []],
+    ["ESP32_WROOM_32E:33", "28BYJ_48_stepper_motor:B-", "green", []],
+    ["ESP32_WROOM_32E:14", "SW_Push:1.r", "green", []],
+    ["ESP32_WROOM_32E:GND.1", "SW_Push:2.r", "black", []],
+    ["ESP32_WROOM_32E:25", "LED:A", "green", []],
+    ["ESP32_WROOM_32E:GND.1", "LED:C", "black", []],
+    ["ESP32_WROOM_32E:17", "PUMP:A", "green", ["h20", "v110", "h-10"]],
+    ["ESP32_WROOM_32E:GND.1", "PUMP:C", "black", []],
+    ["ESP32_WROOM_32E:3V3", "DS18B20:VCC", "red", ["h-30", "v-80", "h10"]],
+    ["ESP32_WROOM_32E:4", "DS18B20:DQ", "green", []],
+    ["ESP32_WROOM_32E:GND.2", "DS18B20:GND", "black", ["h25", "v-75", "h10"]],
+    ["ESP32_WROOM_32E:3V3", "Soil_moisture1:VCC", "red", ["h-30", "v-80", "h10"]],
+    ["ESP32_WROOM_32E:34", "Soil_moisture1:SIG", "green", ["h-20", "v-103", "h10"]],
+    ["ESP32_WROOM_32E:GND.2", "Soil_moisture1:GND", "black", ["h25", "v-75", "h10"]],
+    ["ESP32_WROOM_32E:3V3", "Soil_moisture2:VCC", "red", ["h-30", "v-80", "h10"]],
+    ["ESP32_WROOM_32E:35", "Soil_moisture2:SIG", "green", ["h-20", "v-109", "h10"]],
+    ["ESP32_WROOM_32E:GND.2", "Soil_moisture2:GND", "black", ["h25", "v-75", "h10"]],
+    ["ESP32_WROOM_32E:3V3", "Soil_moisture3:VCC", "red", ["h-30", "v-80", "h10"]],
+    ["ESP32_WROOM_32E:VP", "Soil_moisture3:SIG", "green", ["h-20", "v-76", "h10"]],
+    ["ESP32_WROOM_32E:GND.2", "Soil_moisture3:GND", "black", ["h25", "v-75", "h10"]],
+    ["ESP32_WROOM_32E:3V3", "ambient_temp_moisture:VCC", "red", ["h-30", "v-320", "h10"]],
+    ["ESP32_WROOM_32E:GND.2", "ambient_temp_moisture:GND", "black", ["h15", "v-311", "h10"]],
+    ["ESP32_WROOM_32E:21", "ambient_temp_moisture:SCL", "green", ["h400", "v10"]],
+    ["ESP32_WROOM_32E:22", "ambient_temp_moisture:SDA", "green", ["h380", "v10"]],
+    ["ESP32_WROOM_32E:3V3", "ambient_light:VCC", "red", ["h-30", "v-270", "h10"]],
+    ["ESP32_WROOM_32E:GND.2", "ambient_light:GND", "black", ["h15", "v-261", "h10"]],
+    ["ESP32_WROOM_32E:21", "ambient_light:SCL", "green", ["h400", "v10"]],
+    ["ESP32_WROOM_32E:22", "ambient_light:SDA", "green", ["h380", "v10"]],
+    ["ESP32_WROOM_32E:3V3", "clock:VCC", "red", ["h-30", "v-220", "h10"]],
+    ["ESP32_WROOM_32E:GND.2", "clock:GND", "black", ["h15", "v-211", "h10"]],
+    ["ESP32_WROOM_32E:21", "clock:SCL", "green", ["h400", "v10"]],
+    ["ESP32_WROOM_32E:22", "clock:SDA", "green", ["h380", "v10"]],
+    ["ESP32_WROOM_32E:GND.2", "logging:GND", "black", []],
+    ["ESP32_WROOM_32E:3V3", "logging:VCC", "red", ["h-30", "v-80", "h10"]],
+    ["ESP32_WROOM_32E:19", "logging:DO", "green", []],
+    ["ESP32_WROOM_32E:18", "logging:SCK", "green", []],
+    ["ESP32_WROOM_32E:23", "logging:DI", "green", []],
+    ["ESP32_WROOM_32E:5", "logging:CS", "green", []]
+  ]
+}

@@ -1,0 +1,714 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "f68a7df8-8f00-474a-9375-1534f4779aa8")
+	(paper "A4")
+	(title_block
+		(title "It That Keeps My Plants Alive")
+		(date "2026-08-31")
+		(rev "1.0")
+		(comment 1 "Author: Hippolyte Audet-Lagacé")
+	)
+	(lib_symbols)
+	(wire
+		(pts
+			(xy 121.92 107.95) (xy 128.27 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0d414633-d67f-4baa-82d7-691a8e945ae0")
+	)
+	(wire
+		(pts
+			(xy 121.92 105.41) (xy 128.27 105.41)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11c76b22-9e78-4fdb-8c1b-8fc0701e1b52")
+	)
+	(wire
+		(pts
+			(xy 121.92 36.83) (xy 128.27 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11e39603-b95c-4437-a458-742c0a46f881")
+	)
+	(wire
+		(pts
+			(xy 121.92 49.53) (xy 128.27 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "126bab46-661c-41f5-a4b8-bff967435c19")
+	)
+	(wire
+		(pts
+			(xy 63.5 129.54) (xy 63.5 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "16e92a5f-e19a-43e1-b9b9-c566ebe63056")
+	)
+	(wire
+		(pts
+			(xy 121.92 110.49) (xy 128.27 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "44e4c180-69b5-47be-8f50-9d522e4e7ca6")
+	)
+	(wire
+		(pts
+			(xy 121.92 92.71) (xy 128.27 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f69b1b1-29e6-4fb8-95ff-8a26b3f37365")
+	)
+	(wire
+		(pts
+			(xy 66.04 129.54) (xy 66.04 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "557bc0e2-2144-4226-b892-62128fc4e471")
+	)
+	(wire
+		(pts
+			(xy 121.92 52.07) (xy 128.27 52.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7db99d5f-0a96-4d31-9814-538ca8104cc2")
+	)
+	(wire
+		(pts
+			(xy 68.58 129.54) (xy 68.58 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f2a6825-2572-48d0-a44e-c4dc3825a87b")
+	)
+	(wire
+		(pts
+			(xy 121.92 46.99) (xy 128.27 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "89685ff5-ced2-4e11-8cb0-82d73df8d850")
+	)
+	(wire
+		(pts
+			(xy 121.92 44.45) (xy 128.27 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "baed6c4d-50ae-4162-9497-9338c1259a1a")
+	)
+	(wire
+		(pts
+			(xy 121.92 59.69) (xy 128.27 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d12d60cb-3bad-4bbb-80df-cbd326b23f80")
+	)
+	(wire
+		(pts
+			(xy 121.92 97.79) (xy 128.27 97.79)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e52f4f8b-0cca-4e39-90bf-76177464d91a")
+	)
+	(wire
+		(pts
+			(xy 71.12 129.54) (xy 71.12 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed6dd9ae-76b1-4b4a-a12a-a2b74cb5bb96")
+	)
+	(wire
+		(pts
+			(xy 121.92 95.25) (xy 128.27 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa4bd0f6-f8f0-41d6-a344-6208bdd4f5b0")
+	)
+	(wire
+		(pts
+			(xy 121.92 29.21) (xy 128.27 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc93c81a-a710-413f-86fb-addbf26e7048")
+	)
+	(sheet
+		(at 20.574 21.336)
+		(size 101.346 108.204)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "195e445a-c29d-4930-ad20-28aeb2476b15")
+		(property "Sheetname" "ESP32_Core"
+			(at 20.574 20.6244 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "esp32_core.kicad_sch"
+			(at 20.574 130.1246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "LED_PWN" output
+			(at 121.92 36.83 0)
+			(uuid "fc7b228c-889e-4639-a336-279f4989ac97")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LIMIT_SW" input
+			(at 121.92 59.69 0)
+			(uuid "f3bce622-e8c5-421c-99a0-44fefed74e25")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "MOISTURE1_ADC" input
+			(at 121.92 105.41 0)
+			(uuid "1b0d8820-6e41-4415-8cac-6fdb04eeb261")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "MOISTURE2_ADC" input
+			(at 121.92 107.95 0)
+			(uuid "6482ba48-b42b-45d4-9594-bafc3070a1f3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "MOISTURE3_ADC" input
+			(at 121.92 110.49 0)
+			(uuid "bb0e3a20-fa61-4c21-81b0-988ddd7d9b61")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "ONEWIRE_TEMP" bidirectional
+			(at 121.92 97.79 0)
+			(uuid "b82d3404-68e7-4db3-8dbc-e6d09da8c29f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "PUMP_EN" output
+			(at 121.92 29.21 0)
+			(uuid "5003e3de-e8fb-411c-80b9-460930027e58")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SCL" bidirectional
+			(at 121.92 95.25 0)
+			(uuid "90c8f61e-4fc0-481f-b21a-f211aa0115bc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SDA" bidirectional
+			(at 121.92 92.71 0)
+			(uuid "97c2bc8a-7305-4fd6-b63c-6e245cb305b6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "STEPPER_IN1" output
+			(at 121.92 44.45 0)
+			(uuid "2cf3f37b-ab23-498e-b6fe-9859cde4231c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "STEPPER_IN2" output
+			(at 121.92 46.99 0)
+			(uuid "72773e82-6f71-48f3-a6b9-510ff388741b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "STEPPER_IN3" output
+			(at 121.92 49.53 0)
+			(uuid "f755b6ca-2576-4689-b14f-19e20502c816")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "STEPPER_IN4" output
+			(at 121.92 52.07 0)
+			(uuid "47fb2ccb-51c8-4bb6-919b-76b204c12250")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SD_CS" output
+			(at 63.5 129.54 270)
+			(uuid "5c1b0f27-fe52-425a-93e8-e9a50390c107")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SD_MISO" input
+			(at 71.12 129.54 270)
+			(uuid "78fb8702-8c09-4d26-8d61-fa6a79c3c249")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SD_MOSI" output
+			(at 66.04 129.54 270)
+			(uuid "32315425-b6fa-496a-8e95-ba39ed1bb820")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SD_SCK" output
+			(at 68.58 129.54 270)
+			(uuid "8e225bf3-1984-491d-b36b-db8fc5522878")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "Schematic"
+				(path "/f68a7df8-8f00-474a-9375-1534f4779aa8"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 128.27 78.74)
+		(size 147.32 50.8)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "a2eaf65a-6421-4ca7-bd42-9b40973e2c1e")
+		(property "Sheetname" "Sensors"
+			(at 128.27 78.0284 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "sensors.kicad_sch"
+			(at 128.27 130.1246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "MOISTURE1_ADC" output
+			(at 128.27 105.41 180)
+			(uuid "d5719d0d-d3b1-4d34-bf48-225e22494e88")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "MOISTURE2_ADC" output
+			(at 128.27 107.95 180)
+			(uuid "b7cc6d40-96f7-4383-b39f-4598b2145792")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "MOISTURE3_ADC" output
+			(at 128.27 110.49 180)
+			(uuid "520d1410-08f0-4bb8-932f-110fbe68e364")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "ONEWIRE_TEMP" bidirectional
+			(at 128.27 97.79 180)
+			(uuid "2d91a8fe-bc42-4abd-b755-6f258d9c77f7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SDA" bidirectional
+			(at 128.27 92.71 180)
+			(uuid "a3f6d344-5c2c-4101-b23e-2af84f13c624")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "SCL" bidirectional
+			(at 128.27 95.25 180)
+			(uuid "94190bc6-0631-4df8-adb0-6141d59eeb14")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "Schematic"
+				(path "/f68a7df8-8f00-474a-9375-1534f4779aa8"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 20.574 135.89)
+		(size 149.352 53.594)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "c3bbcdf8-a043-4edf-b212-8e377f1867ed")
+		(property "Sheetname" "Storage"
+			(at 19.8624 189.484 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "storage.kicad_sch"
+			(at 170.5106 189.484 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "SD_CS" input
+			(at 63.5 135.89 90)
+			(uuid "65da84c8-8de8-43c5-a580-74e8787e48a1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SD_MISO" output
+			(at 71.12 135.89 90)
+			(uuid "3a92eb7b-15d2-419e-9d78-0b8004a36d35")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SD_MOSI" input
+			(at 66.04 135.89 90)
+			(uuid "db80fbd2-dc41-4a98-9456-4b418f8cab57")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "SD_SCK" input
+			(at 68.58 135.89 90)
+			(uuid "660cd588-04f2-4fea-9074-bb88798fa6f5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "Schematic"
+				(path "/f68a7df8-8f00-474a-9375-1534f4779aa8"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 128.27 21.336)
+		(size 147.574 52.324)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "e6e4e28b-5865-42c8-be36-35548282d9fa")
+		(property "Sheetname" "Actuators"
+			(at 128.27 20.6244 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "actuators.kicad_sch"
+			(at 128.27 74.2446 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "LED_PWM" input
+			(at 128.27 36.83 180)
+			(uuid "b2c19e31-b218-45a8-9398-7f87118665ba")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LIMIT_SW" output
+			(at 128.27 59.69 180)
+			(uuid "ebf381c8-e5b6-4fa6-8eb4-9f5489811524")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "PUMP_EN" input
+			(at 128.27 29.21 180)
+			(uuid "92f00f55-c6f4-446e-93ff-e77986df8f8e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "STEPPER_IN1" input
+			(at 128.27 44.45 180)
+			(uuid "61c90c0e-02e9-4ef5-9086-847e5f283691")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "STEPPER_IN2" input
+			(at 128.27 46.99 180)
+			(uuid "557904ff-3eb4-4d88-ba4c-793dceef9ba9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "STEPPER_IN3" input
+			(at 128.27 49.53 180)
+			(uuid "055662e6-b3da-400d-94e8-cf5d3f32c417")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "STEPPER_IN4" input
+			(at 128.27 52.07 180)
+			(uuid "470dd9b2-7485-4c25-853c-4e99e5cd980f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "Schematic"
+				(path "/f68a7df8-8f00-474a-9375-1534f4779aa8"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

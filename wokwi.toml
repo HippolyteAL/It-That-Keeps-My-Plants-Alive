@@ -1,0 +1,18 @@
+[wokwi]
+version = 1
+firmware = 'build/it_that_makes_my_plants_survive.bin'
+elf = 'build/it_that_makes_my_plants_survive.elf'
+bootloader = 'build/bootloader/bootloader.bin'
+partition_table = 'build/partition_table/partition-table.bin'
+
+[[chip]]
+name = 'DS3231' # Better clock than DS1307, and runs on I2C.
+binary = 'chips/DS3231.chip.wasm'
+
+[[chip]]
+name = 'BH1750'
+binary = 'chips/BH1750.chip.wasm'
+
+[[chip]]
+name = 'SHT31' 
+binary = 'chips/SHT31.chip.wasm'
