@@ -2,18 +2,32 @@
 
 ## Introduction
 
+My houseplants met their untimely demise to the hands of not receiving the proper amount of water, so I have come up with a solution. It's a machine that monitors temperature, humidity and light and controls a grow light and water arm to make sure the plants stay alive.
+
 ## Wokwi simulation
 
-## Software architecture
-- `sensor_task` — periodic sampling of moisture/temp/humidity/light
-- `actuator_task` — hysteresis pump control + RTC-driven light schedule + stepper control
-- `logging_task` — CSV to SD card and/or MQTT publish
+Before getting any expense, I decided to run this whole thing in a Wokwi simulation that will be linked here:
 
-(#TODO add diagram)
+(Placeholder image, will be replaced by the wokwi web simulation link once completed)
+<p align="center">
+  <a href="screenshots/diagram_screenshot.jpg">
+    <img src="screenshots/diagram_screenshot.jpg" width="99%">
+  </a>
+</p>
+
+
+## Software architecture
+Located in main/
+
+File | Purpose
+---|---
+main.c | Main
+sensors.c | Periodic sampling of moisture/temp/humidity/light
+actuators.c | Pump control + RTC-driven light schedule + stepper control
+storage.c | CSV to SD card and/or MQTT publish
 
 ## Build
 
-For VSC:
 - Install ISP-IDF v5.5.5
 - In an ESP-IDF terminal, run the commands:
     - idf.py set-target esp32
@@ -21,7 +35,7 @@ For VSC:
 
 ## Hardware
 
-See the Schematic.pdf, here's a breakdown of materials (cost sourced from canadian prices):
+See the Schematic.pdf, here's a breakdown of materials (cost sourced from canadian prices, 2026):
 
 Piece | Function | Cost (pre-tax, CAD)
 --- | --- | ---
