@@ -1,9 +1,15 @@
 #include "sensors.h"
 #include "pinout.h"
-
+ 
+#include <stddef.h>
+ 
 #include "esp_log.h"
 #include "esp_adc/adc_oneshot.h"
 #include "driver/i2c_master.h"
+#include "driver/gpio.h"
+#include "esp_rom_sys.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 static const char *TAG = "sensors";
 
@@ -32,19 +38,153 @@ static float potentiometer_to_moisture_pct(int raw_counts){
     return moisture;
 }
 
+// Onewire setup ----------------------------------------------------------------------------------
+
+#define ONEWIRE_CMD_SKIP_ROM         0xCC
+#define DS18B20_CMD_CONVERT_T        0x44
+#define DS18B20_CMD_READ_SCRATCHPAD  0xBE
+static portMUX_TYPE s_onewire_mux = portMUX_INITIALIZER_UNLOCKED;
+
+static void onewire_bus_init(void) {
+    gpio_config_t io_conf = {
+        .pin_bit_mask = 1ULL << PIN_ONEWIRE_TEMP,
+        .mode         = GPIO_MODE_INPUT_OUTPUT_OD,  // open-drain
+        .pull_up_en   = GPIO_PULLUP_ENABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type    = GPIO_INTR_DISABLE,
+    };
+    gpio_config(&io_conf);
+    gpio_set_level(PIN_ONEWIRE_TEMP, 1);    // idle high
+}
+
+static bool onewire_reset_pulse(void) {
+    gpio_set_level(PIN_ONEWIRE_TEMP, 0);    // resets pulse and hold low
+    esp_rom_delay_us(480);
+    gpio_set_level(PIN_ONEWIRE_TEMP, 1);   // releases and wait for a presence pulse (pulling low)
+    esp_rom_delay_us(70);
+    bool presence = (gpio_get_level(PIN_ONEWIRE_TEMP) == 0);
+    esp_rom_delay_us(410);
+    return presence;    // returns true if a device pulled the bus low in response
+}
+
+static void onewire_write_bit(bool bit) {
+    taskENTER_CRITICAL(&s_onewire_mux);
+    if (bit) {
+        gpio_set_level(PIN_ONEWIRE_TEMP, 0);
+        esp_rom_delay_us(6);
+        gpio_set_level(PIN_ONEWIRE_TEMP, 1);
+        esp_rom_delay_us(64);
+    } else {
+        gpio_set_level(PIN_ONEWIRE_TEMP, 0);
+        esp_rom_delay_us(60);
+        gpio_set_level(PIN_ONEWIRE_TEMP, 1);
+        esp_rom_delay_us(10);
+    }
+    taskEXIT_CRITICAL(&s_onewire_mux);
+}
+static bool onewire_read_bit(void) {
+    bool bit;
+    taskENTER_CRITICAL(&s_onewire_mux);
+    gpio_set_level(PIN_ONEWIRE_TEMP, 0);
+    esp_rom_delay_us(6);
+    gpio_set_level(PIN_ONEWIRE_TEMP, 1);
+    esp_rom_delay_us(9);
+    bit = (gpio_get_level(PIN_ONEWIRE_TEMP) != 0);
+    esp_rom_delay_us(55);
+    taskEXIT_CRITICAL(&s_onewire_mux);
+    return bit;
+}
+static void onewire_write_byte(uint8_t byte) {
+    for (int i = 0; i < 8; i++) {
+        onewire_write_bit(byte & 0x01);
+        byte >>= 1;
+    }
+}
+static uint8_t onewire_read_byte(void) {
+    uint8_t byte = 0;
+    for (int i = 0; i < 8; i++) {
+        byte >>= 1;
+        if (onewire_read_bit()) {
+            byte |= 0x80;
+        }
+    }
+    return byte;
+}
+
+// Dallas/Maxim CRC8 (poly x^8+x^5+x^4+1, reflected 0x8C), used to verify the DS18B20 scratchpad.
+static uint8_t onewire_crc8(const uint8_t *data, size_t len)
+{
+    uint8_t crc = 0;
+    for (size_t i = 0; i < len; i++) {
+        uint8_t in_byte = data[i];
+        for (int b = 0; b < 8; b++) {
+            uint8_t mix = (crc ^ in_byte) & 0x01;
+            crc >>= 1;
+            if (mix) {
+                crc ^= 0x8C;
+            }
+            in_byte >>= 1;
+        }
+    }
+    return crc;
+}
+
+// Initialization ---------------------------------------------------------------------------------
+
 esp_err_t sensors_init(void) {
-    ESP_LOGI(TAG, "sensors_init: stub");
+    ESP_LOGI(TAG, "sensors_init");
     // TODO: i2c_new_master_bus() on PIN_I2C_SCL / PIN_I2C_SDA -> s_i2c_bus
     // TODO: i2c_master_bus_add_device() for SHT31 / BH1750 / DS3231 using I2C_ADDR_SHT31 / I2C_ADDR_BH1750 / I2C_ADDR_DS3231
     // TODO: adc_oneshot_new_unit(ADC_UNIT_MOISTURE) -> s_adc_handle
     // TODO: adc_oneshot_config_channel() for ADC_CHANNEL_MOISTURE{1,2,3}
-    // TODO: configure PIN_ONEWIRE_TEMP as a bit-banged onewire bus for the DS18B20
+
+    onewire_bus_init();
+
     return ESP_OK;
 }
 
+// Exposed functions ------------------------------------------------------------------------------
+
 esp_err_t sensors_read_soil_temp(float *out_c) {
-    // TODO: DS18B20 convert-T + read-scratchpad sequence over 1-Wire on PIN_ONEWIRE_TEMP, convert the raw 12-bit reading to degrees C.
-    *out_c = 0.0f;
+    if (out_c == NULL) {
+        return ESP_ERR_INVALID_ARG;
+    }
+ 
+    if (!onewire_reset_pulse()) {
+        ESP_LOGW(TAG, "soil_temp: no OneWire presence pulse on GPIO%d - check wiring", PIN_ONEWIRE_TEMP);
+        return ESP_ERR_NOT_FOUND;
+    }
+ 
+    onewire_write_byte(ONEWIRE_CMD_SKIP_ROM);      // single device on the bus
+    onewire_write_byte(DS18B20_CMD_CONVERT_T);
+ 
+    /* Default 12-bit resolution conversion takes up to 750ms. This blocks
+     * whichever task calling this (sensor_task) for that long, which is fine
+     * because of the 5s poll period. */
+    vTaskDelay(pdMS_TO_TICKS(750));
+ 
+    if (!onewire_reset_pulse()) {
+        ESP_LOGW(TAG, "soil_temp: lost presence before scratchpad read");
+        return ESP_ERR_NOT_FOUND;
+    }
+ 
+    onewire_write_byte(ONEWIRE_CMD_SKIP_ROM);
+    onewire_write_byte(DS18B20_CMD_READ_SCRATCHPAD);
+ 
+    uint8_t scratchpad[9];
+    for (int i = 0; i < 9; i++) {
+        scratchpad[i] = onewire_read_byte();
+    }
+ 
+    if (onewire_crc8(scratchpad, 8) != scratchpad[8]) {
+        ESP_LOGW(TAG, "soil_temp: scratchpad CRC mismatch");    // electric problem (missing pull-up, bad ground)
+        return ESP_ERR_INVALID_CRC;
+    }
+ 
+    // scratchpad bytes 0-1 are the temperature register, LSB first, 1/16 degC per LSB at the default 12-bit resolution
+    int16_t raw = (int16_t)((scratchpad[1] << 8) | scratchpad[0]);
+    *out_c = raw / 16.0f;
+ 
     return ESP_OK;
 }
 

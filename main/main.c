@@ -14,8 +14,6 @@
 #include "storage.h"
 
 /*
-main.c
-
 esp32_core.kicad_sch. Defines and executes the shared system state, task scheduling, 
 and the plant-care control loop.
 */
