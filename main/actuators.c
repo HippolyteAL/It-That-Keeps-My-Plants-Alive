@@ -50,6 +50,8 @@ esp_err_t init_LED(void) {
         ESP_LOGE(TAG, "ledc_channel_config failed: %s", esp_err_to_name(err));
         return err;
     }
+
+    return ESP_OK;
 }
 
 // Initialization ---------------------------------------------------------------------------------

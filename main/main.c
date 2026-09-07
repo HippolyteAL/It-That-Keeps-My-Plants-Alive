@@ -64,6 +64,11 @@ static void sensor_task(void *arg) {
             xSemaphoreTake(s_state.mutex, portMAX_DELAY);
             s_state.latest = reading;
             xSemaphoreGive(s_state.mutex);
+
+            // testing wokwi setup
+            ESP_LOGI(TAG, "sensor_task: soil_temp=%.2fC moisture=[%.1f, %.1f, %.1f]%% " "ambient=%.2fC/%.1f%%RH lux=%.1f",
+                    reading.soil_temp_c, reading.soil_moisture_pct[0], reading.soil_moisture_pct[1], reading.soil_moisture_pct[2],
+                    reading.ambient_temp_c, reading.ambient_humidity_pct, reading.ambient_lux);
         } else {
             ESP_LOGW(TAG, "sensor_task: read_all failed");
         }
@@ -87,6 +92,9 @@ static void control_task(void *arg) {
 
             bool too_dark = reading.ambient_lux < AMBIENT_LUX_LOW_THRESHOLD;
             actuators_set_led_brightness(too_dark ? 100 : 0);
+
+            // testing the wokwi setup
+            ESP_LOGI(TAG, "control_task: pump=%s led=%d%%", too_dry ? "ON" : "off", too_dark ? 100 : 0);
         }
 
         if (actuators_limit_switch_triggered()) {
