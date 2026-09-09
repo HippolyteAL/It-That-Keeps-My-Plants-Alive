@@ -26,7 +26,7 @@ static const char *TAG = "main";
 #define LOGGING_PERIOD_MS           (60 * 1000)
 
 #define MOISTURE_LOW_THRESHOLD_PCT  30.0f
-#define AMBIENT_LUX_LOW_THRESHOLD   200.0f
+#define TARGET_AMBIENT_LUX          8000.0f
 
 // Shared system state: written by sensor_task, read by control_task and logging_task. 
 // Guarded by a mutex since it's touched from three tasks.
@@ -84,17 +84,22 @@ static void control_task(void *arg) {
         xSemaphoreGive(s_state.mutex);
 
         if (reading.valid) {
-            // control policy. TODO: each pot moisture should be individually tracked
-            bool too_dry = (reading.soil_moisture_pct[0] < MOISTURE_LOW_THRESHOLD_PCT) ||
-                            (reading.soil_moisture_pct[1] < MOISTURE_LOW_THRESHOLD_PCT) ||
-                            (reading.soil_moisture_pct[2] < MOISTURE_LOW_THRESHOLD_PCT);
-            actuators_set_pump(too_dry);
-
-            bool too_dark = reading.ambient_lux < AMBIENT_LUX_LOW_THRESHOLD;
-            actuators_set_led_brightness(too_dark ? 100 : 0);
-
-            // testing the wokwi setup
-            ESP_LOGI(TAG, "control_task: pump=%s led=%d%%", too_dry ? "ON" : "off", too_dark ? 100 : 0);
+            /* TODO: this reacts the instant a probe dips below threshold. The final goal is to require it to stay below threshold for a
+            minimum duration first, so a single noisy/borderline reading doesn't trigger a watering cycle, and so watering cycles can be
+            potentially executed all at once. */
+            for (uint8_t zone = 0; zone < 3; zone++) {
+                if (reading.soil_moisture_pct[zone] < MOISTURE_LOW_THRESHOLD_PCT) {
+                    ESP_LOGI(TAG, "control_task: zone %u dry (%.1f%%), watering", zone, reading.soil_moisture_pct[zone]);
+                    esp_err_t err = actuators_water_zone(zone, reading.rtc_unix_time);
+                    if (err != ESP_OK) {
+                        ESP_LOGW(TAG, "control_task: water_zone(%u) failed: %s", zone, esp_err_to_name(err));
+                    }
+                }
+            }
+            
+            uint8_t led_percent = 0;
+            actuators_set_led_for_target_lux(reading.ambient_lux, TARGET_AMBIENT_LUX, &led_percent);
+            ESP_LOGI(TAG, "control_task: ambient=%.1flux led=%u%% (target=%.0flux)", reading.ambient_lux, led_percent, TARGET_AMBIENT_LUX);
         }
 
         if (actuators_limit_switch_triggered()) {
