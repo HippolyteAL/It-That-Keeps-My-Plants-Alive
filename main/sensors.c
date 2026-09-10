@@ -496,8 +496,9 @@ esp_err_t sensors_read_all(sensor_readings_t *out) {
     bool ok = true;
     esp_err_t err;
 
-    err = sensors_read_soil_temp(&out->soil_temp_c);
-    ok &= (err == ESP_OK);
+    // Backlogged for now, faulty simulated chip and not necessary for the project as a whole
+    // err = sensors_read_soil_temp(&out->soil_temp_c);
+    // ok &= (err == ESP_OK);
 
     for (int i = 0; i < 3; i++) {
         err = sensors_read_soil_moisture((uint8_t)i, &out->soil_moisture_pct[i]);

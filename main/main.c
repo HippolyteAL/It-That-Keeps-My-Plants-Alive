@@ -50,7 +50,7 @@ void app_main(void) {
     ESP_ERROR_CHECK(sensors_init());
     ESP_ERROR_CHECK(actuators_init());
     ESP_ERROR_CHECK(storage_init());
-    ESP_ERROR_CHECK(actuators_stepper_home());
+    // ESP_ERROR_CHECK(actuators_stepper_home());
 
     xTaskCreate(sensor_task,  "sensor_task",  4096, NULL, 5, NULL);
     xTaskCreate(control_task, "control_task", 4096, NULL, 5, NULL);

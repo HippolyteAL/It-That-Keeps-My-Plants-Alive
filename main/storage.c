@@ -142,6 +142,7 @@ esp_err_t storage_log_reading(const sensor_readings_t *reading) {
                 reading->soil_temp_c);
             fclose(f);
             s_last_ambient_log_unix = reading->rtc_unix_time;
+            ESP_LOGI(TAG, "storage: logged hourly data");
         } else {
             ESP_LOGE(TAG, "failed to open %s for append", AMBIENT_LOG_PATH);
             err = ESP_FAIL;
@@ -159,6 +160,7 @@ esp_err_t storage_log_reading(const sensor_readings_t *reading) {
                     reading->ambient_lux);
             fclose(f);
             s_last_soil_lux_log_unix = reading->rtc_unix_time;
+            ESP_LOGI(TAG, "storage: logged 0.25-hourly data");
         } else {
             ESP_LOGE(TAG, "failed to open %s for append", SOIL_LUX_LOG_PATH);
             err = ESP_FAIL;
