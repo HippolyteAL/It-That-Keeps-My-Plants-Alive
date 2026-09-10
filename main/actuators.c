@@ -1,5 +1,6 @@
 #include "actuators.h"
 #include "pinout.h"
+#include "storage.h"
 
 #include "esp_log.h"
 #include "driver/gpio.h"
