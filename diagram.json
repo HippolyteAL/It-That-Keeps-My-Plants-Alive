@@ -58,7 +58,7 @@
         "left": 170,
         "top": -150,
         "attrs": {
-            "value": "700"
+            "value": "300"
         }
     }, {
         "id": "Soil_moisture2",
@@ -74,7 +74,7 @@
         "left": 370,
         "top": -150,
         "attrs": {
-            "value": "300"
+            "value": "700"
         }
     }, {
         "id": "logging",

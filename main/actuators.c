@@ -225,13 +225,19 @@ esp_err_t actuators_stepper_move(stepper_dir_t dir, uint32_t steps) {
         if (dir == STEPPER_DIR_CW) {
             s_stepper_step_index = (uint8_t)((s_stepper_step_index + 1) % 4);
             s_stepper_position   = (s_stepper_position + 1) % (int32_t)STEPS_PER_REV;
-        } else {
-            s_stepper_step_index = (uint8_t)((s_stepper_step_index + 3) % 4); /* -1 mod 4 */
+
+            for (int p = 0; p < 4; p++) {
+                gpio_set_level(s_stepper_pins[p], STEPPER_STEP_TABLE[s_stepper_step_index][p]);
+            }
+        } 
+        // TODO: fix CCW direction
+        if (dir == STEPPER_DIR_CCW) {
+            s_stepper_step_index = (uint8_t)((s_stepper_step_index + 3) % 4);
             s_stepper_position   = (s_stepper_position + (int32_t)STEPS_PER_REV - 1) % (int32_t)STEPS_PER_REV;
-        }
-        
-        for (int p = 0; p < 4; p++) {
-            gpio_set_level(s_stepper_pins[p], STEPPER_STEP_TABLE[s_stepper_step_index][p]);
+
+            for (int p = 0; p < 4; p++) {
+                gpio_set_level(s_stepper_pins[3-p], STEPPER_STEP_TABLE[s_stepper_step_index][3-p]);
+            }
         }
         
         vTaskDelay(pdMS_TO_TICKS(STEPPER_STEP_DELAY_MS));
@@ -246,20 +252,29 @@ esp_err_t actuators_stepper_move(stepper_dir_t dir, uint32_t steps) {
 }
  
 esp_err_t actuators_stepper_home(void) {
-    // Step one direction until the limit switch trips, or after one full revolution (for simulation only) TODO: edit before moving to hardware.
+    ESP_LOGI(TAG, "control_task: started homing sequence.");
+    /* Step one direction until the limit switch trips, or after one full revolution (for simulation only) TODO: edit before moving to hardware,
+    and make it move opposite the watering event movement. */
     bool found = false;
     for (uint32_t i = 0; i < STEPS_PER_REV; i++) {
         if (actuators_limit_switch_triggered()) {
             found = true;
             break;
         }
-        actuators_stepper_move(STEPPER_DIR_CW, 1);
+        // TODO: remove this clause outside of simulation testing (no physical homing button)
+        if (s_stepper_position == 0) {
+            found = true;
+            break;
+        }
+        actuators_stepper_move(STEPPER_DIR_CCW, abs(s_stepper_position));
     }
     
     if (!found) {
         ESP_LOGW(TAG, "stepper_home: limit switch never triggered after a full revolution");
         storage_log_error("actuators_stepper_home", ESP_ERR_NOT_FOUND);
     }
+
+    ESP_LOGI(TAG, "control_task: stepper position succesfully reset.");
 
     s_stepper_position = 0;
     s_stepper_step_index = 0;
@@ -278,7 +293,7 @@ esp_err_t actuators_water_zone(uint8_t zone_index, int64_t unix_time) {
     // Testing-only positions: 1/6, 2/6, 3/6 of a full rotation from home
     int32_t target_steps = ((int32_t)(zone_index + 1) * (int32_t)STEPS_PER_REV) / 6;
     
-    // TODO: make sure the zones are hit in order, to avoid having to backtrack or doing a full revolution
+    // TODO: this makes it always move in the same direction outside of the homing sequence, change?
     int32_t delta = target_steps - s_stepper_position;
     if (delta < 0) {
         delta += (int32_t)STEPS_PER_REV;
@@ -304,6 +319,12 @@ esp_err_t actuators_water_zone(uint8_t zone_index, int64_t unix_time) {
  
     // TODO: measure volume, not doable/worth it to implement in a simumation.
     storage_log_water_event(unix_time, zone_index, -1.0f);
+
+    // Return the stepper to initial position
+    err = actuators_stepper_home();
+    if (err != ESP_OK) {
+        return err;
+    }
  
     return ESP_OK;
 }

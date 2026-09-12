@@ -23,7 +23,7 @@ static const char *TAG = "main";
 //TODO placeholder values, revisit once sensors are calibrated
 #define SENSOR_POLL_PERIOD_MS       (5 * 1000)
 #define CONTROL_LOOP_PERIOD_MS      (10 * 1000)
-#define LOGGING_PERIOD_MS           (60 * 1000)
+#define LOGGING_PERIOD_MS           (15 * 1000) // TODO: Should be every 15 minutes (15 x 60000) outside of testing ?
 
 #define MOISTURE_LOW_THRESHOLD_PCT  30.0f
 #define TARGET_AMBIENT_LUX          8000.0f
@@ -66,9 +66,9 @@ static void sensor_task(void *arg) {
             xSemaphoreGive(s_state.mutex);
 
             // testing wokwi setup
-            ESP_LOGI(TAG, "sensor_task: soil_temp=%.2fC moisture=[%.1f, %.1f, %.1f]%% " "ambient=%.2fC/%.1f%%RH lux=%.1f",
-                    reading.soil_temp_c, reading.soil_moisture_pct[0], reading.soil_moisture_pct[1], reading.soil_moisture_pct[2],
-                    reading.ambient_temp_c, reading.ambient_humidity_pct, reading.ambient_lux);
+            ESP_LOGI(TAG, "sensor_task: rtc=%" PRId64 " soil_temp=%.2fC moisture=[%.1f, %.1f, %.1f]%% " "ambient=%.2fC/%.1f%%RH lux=%.1f",
+                    reading.rtc_unix_time, reading.soil_temp_c, reading.soil_moisture_pct[0], reading.soil_moisture_pct[1], 
+                    reading.soil_moisture_pct[2], reading.ambient_temp_c, reading.ambient_humidity_pct, reading.ambient_lux);
         } else {
             ESP_LOGW(TAG, "sensor_task: read_all failed");
         }
@@ -86,7 +86,7 @@ static void control_task(void *arg) {
         if (reading.valid) {
             /* TODO: this reacts the instant a probe dips below threshold. The final goal is to require it to stay below threshold for a
             minimum duration first, so a single noisy/borderline reading doesn't trigger a watering cycle, and so watering cycles can be
-            potentially executed all at once. */
+            potentially executed all at once. This might require moving the homing call outside the watering call to here. */
             for (uint8_t zone = 0; zone < 3; zone++) {
                 if (reading.soil_moisture_pct[zone] < MOISTURE_LOW_THRESHOLD_PCT) {
                     ESP_LOGI(TAG, "control_task: zone %u dry (%.1f%%), watering", zone, reading.soil_moisture_pct[zone]);
