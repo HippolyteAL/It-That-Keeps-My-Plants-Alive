@@ -5,8 +5,6 @@ so the existing ESP-IDF DS3231 driver code works unmodified on the simulated chi
 
 The seven sliders (hour/minute/second/date/month/year/day_of_week) seed the chip's starting time.
 A repeating 1-second timer advances the clock forward automatically like a real RTC running freely.
-Dragging a slider mid-simulation allows adjusting the internal clock to the new value for testing.
-This kind of adjustment cannot be done on real hardware as the chip is read-only.
 */
 
 #include "wokwi-api.h"
@@ -22,14 +20,6 @@ typedef struct {
     pin_t sda;
     i2c_dev_t i2c;
     timer_t timer;
-    // Slider attribute IDs
-    uint32_t attr_hour;
-    uint32_t attr_minute;
-    uint32_t attr_second;
-    uint32_t attr_dow;
-    uint32_t attr_date;
-    uint32_t attr_month;
-    uint32_t attr_year;
     // Internal running clock state (BCD conversion on send)
     int second, minute, hour, dow, date, month, year;
     // I2C transaction state (next register returned)
@@ -47,22 +37,23 @@ void chip_init(void) {
     chip->scl = pin_init("SCL", INPUT_PULLUP);
     chip->sda = pin_init("SDA", INPUT_PULLUP);
     
-    chip->attr_hour   = attr_init("hour", 12);
-    chip->attr_minute = attr_init("minute", 0);
-    chip->attr_second = attr_init("second", 0);
-    chip->attr_date   = attr_init("date", 1);
-    chip->attr_month  = attr_init("month", 1);
-    chip->attr_year   = attr_init("year", 25);
-    chip->attr_dow    = attr_init("day_of_week", 1);
+    // These attribute handles are only needed here, to seed the starting time on initialization
+    uint32_t attr_hour   = attr_init("hour", 12);
+    uint32_t attr_minute = attr_init("minute", 0);
+    uint32_t attr_second = attr_init("second", 0);
+    uint32_t attr_date   = attr_init("date", 1);
+    uint32_t attr_month  = attr_init("month", 1);
+    uint32_t attr_year   = attr_init("year", 25);
+    uint32_t attr_dow    = attr_init("day_of_week", 1);
     
     // Seed internal state from the sliders' current (default) values.
-    chip->hour   = (int)attr_read(chip->attr_hour);
-    chip->minute = (int)attr_read(chip->attr_minute);
-    chip->second = (int)attr_read(chip->attr_second);
-    chip->date   = (int)attr_read(chip->attr_date);
-    chip->month  = (int)attr_read(chip->attr_month);
-    chip->year   = (int)attr_read(chip->attr_year);
-    chip->dow    = (int)attr_read(chip->attr_dow);
+    chip->hour   = (int)attr_read(attr_hour);
+    chip->minute = (int)attr_read(attr_minute);
+    chip->second = (int)attr_read(attr_second);
+    chip->date   = (int)attr_read(attr_date);
+    chip->month  = (int)attr_read(attr_month);
+    chip->year   = (int)attr_read(attr_year);
+    chip->dow    = (int)attr_read(attr_dow);
     
     const i2c_config_t i2c_config = {
         .user_data = chip,
@@ -80,7 +71,7 @@ void chip_init(void) {
         .user_data = chip,
     };
     chip->timer = timer_init(&timer_config);
-    timer_start(chip->timer, 1000000, true);  // 1,000,000 us = 1 second, repeating
+    timer_start(chip->timer, 1000000, true);  // 1,000,000 \mu s = 1 second, repeating
     
     printf("DS3231 simulator ready -- starting at %02d:%02d:%02d\n", 
         chip->hour, chip->minute, chip->second);
@@ -100,7 +91,7 @@ static uint8_t read_register(chip_state_t *chip, uint8_t reg) {
     switch (reg) {
         case 0x00: return dec_to_bcd(chip->second);
         case 0x01: return dec_to_bcd(chip->minute);
-        case 0x02: return dec_to_bcd(chip->hour);  // 24-hour mode, i think the chip has both options
+        case 0x02: return dec_to_bcd(chip->hour);  // 24-hour mode, I think the chip has both options
         case 0x03: return dec_to_bcd(chip->dow);
         case 0x04: return dec_to_bcd(chip->date);
         case 0x05: return dec_to_bcd(chip->month);
@@ -109,30 +100,9 @@ static uint8_t read_register(chip_state_t *chip, uint8_t reg) {
     }
 }
 
+// Advances the clock by exactly one second per second :o
 void tick(void *user_data) {
     chip_state_t *chip = (chip_state_t *)user_data;
-    
-    int new_hour   = (int)attr_read(chip->attr_hour);
-    int new_minute = (int)attr_read(chip->attr_minute);
-    int new_second = (int)attr_read(chip->attr_second);
-    int new_date   = (int)attr_read(chip->attr_date);
-    int new_month  = (int)attr_read(chip->attr_month);
-    int new_year   = (int)attr_read(chip->attr_year);
-    int new_dow    = (int)attr_read(chip->attr_dow);
-    
-    bool slider_moved = (new_hour != chip->hour || new_minute != chip->minute || new_date != chip->date
-        || new_month != chip->month || new_year != chip->year || new_dow != chip->dow);
-    if (slider_moved) {
-        // Live override: snap to the slider values, then keep ticking from here.
-        chip->hour = new_hour;
-        chip->minute = new_minute;
-        chip->second = new_second;
-        chip->date = new_date;
-        chip->month = new_month;
-        chip->year = new_year;
-        chip->dow = new_dow;
-        return;
-    }
     // Normal tick: advance one second and roll over as needed.
     chip->second++;
     if (chip->second >= 60) {
