@@ -1,4 +1,6 @@
 /* 
+Author: Hippolyte Audet-Lagacé
+
 Simulated DS3231 RTC for Wokwi. Implements the real DS3231 I2C protocol 
 (fixed address 0x68, BCD-encoded registers 0x00-0x06 with auto-increment) 
 so the existing ESP-IDF DS3231 driver code works unmodified on the simulated chip.

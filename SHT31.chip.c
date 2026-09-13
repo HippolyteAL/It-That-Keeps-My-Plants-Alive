@@ -1,4 +1,6 @@
 /*
+Author: Hippolyte Audet-Lagacé
+
 Simulated SHT31 temperature/humidity sensor for Wokwi. Implements the real SHT31 I2C protocol 
 including the datasheet's actual CRC-8 checksum generation, so an existing ESP-IDF SHT31 driver code
 works unmodified on the simulated chip.

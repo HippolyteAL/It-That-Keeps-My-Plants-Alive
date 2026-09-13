@@ -1,4 +1,6 @@
 /* 
+Author: Hippolyte Audet-Lagacé
+
 Simulated BH1750 ambient light sensor for Wokwi. Implements the real BH1750 I2C protocol 
 so an ESP-IDF BH1750 driver code works unmodified on this simulated chip.
 
